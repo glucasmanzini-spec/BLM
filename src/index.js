@@ -54,7 +54,13 @@ export default {
         const id = uid(), password_hash = await hashPassword(password);
         try {
           await env.DB.prepare("INSERT INTO users (id, username, password_hash) VALUES (?, ?, ?)").bind(id, username, password_hash).run();
-        } catch { return json({ error: "Esse nome de usuário já está em uso." }, 409); }
+        } catch (error) {
+          const message = String(error?.message || error);
+          if (/unique constraint|users\.username/i.test(message)) {
+            return json({ error: "Esse nome de usuário já está em uso." }, 409);
+          }
+          throw error;
+        }
         const token = await tokenFor({ sub: id, username, exp: Date.now() + 7 * 86400000 }, env.SESSION_SECRET);
         return json({ token, user: { id, username } }, 201);
       }
