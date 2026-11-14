@@ -4,12 +4,19 @@ const json = (data, status = 200) => new Response(JSON.stringify(data), {
 });
 const uid = () => crypto.randomUUID();
 const encoder = new TextEncoder();
+function sessionSecret(env) {
+  const secret = env?.SESSION_SECRET;
+  if (typeof secret !== "string" || secret.trim().length === 0) {
+    throw new Error("SESSION_SECRET ausente no ambiente de execução do Worker blm. Configure em Settings > Compute > Variables and secrets e publique novamente.");
+  }
+  return secret;
+}
 const b64 = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 const unb64 = value => Uint8Array.from(atob(value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4)), c => c.charCodeAt(0));
 
 async function tokenFor(payload, secret) {
   const body = b64(encoder.encode(JSON.stringify(payload)));
-  const key = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const key = await crypto.subtle.importKey("raw", encoder.encode(sessionSecret({ SESSION_SECRET: secret })), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   const sig = await crypto.subtle.sign("HMAC", key, encoder.encode(body));
   return body + "." + b64(sig);
 }
