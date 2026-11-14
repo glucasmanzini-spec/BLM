@@ -1,0 +1,24 @@
+name = "browser-live-messenger"
+main = "src/index.js"
+compatibility_date = "2026-11-14"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "browser-live-messenger"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[[durable_objects.bindings]]
+name = "CHAT_ROOMS"
+class_name = "ChatRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ChatRoom"]
+
+[vars]
+APP_NAME = "Browser Live Messenger"
