@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#1e1f22"><title>Browser Live Messenger</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <section id="auth" class="auth-wrap">
+    <div class="auth-card">
+      <div class="brand-mark">BLM</div>
+      <h1>Browser Live Messenger</h1><p class="muted">Seu espaço para conversar.</p>
+      <div class="tabs"><button id="loginTab" class="active" type="button">Entrar</button><button id="registerTab" type="button">Criar conta</button></div>
+      <form id="authForm">
+        <label>Nome de usuário<input id="username" autocomplete="username" required minlength="3" maxlength="24"></label>
+        <label>Senha<input id="password" type="password" autocomplete="current-password" required minlength="8"></label>
+        <button class="primary full" id="authSubmit">Entrar</button>
+      </form>
+      <p id="authError" class="error" role="alert"></p>
+    </div>
+  </section>
+  <main id="app" class="app hidden">
+    <aside class="servers"><div class="server-logo">B</div><div id="serverList" class="server-list"></div><button id="addServer" class="add-server" title="Criar servidor">+</button></aside>
+    <aside class="channels">
+      <div class="server-heading"><strong id="serverName">Selecione um servidor</strong><span>⌄</span></div>
+      <div class="channel-label"><span>CANAIS DE TEXTO</span><button id="addChannel" title="Criar canal">+</button></div>
+      <div id="channelList" class="channel-list"></div>
+      <div class="user-panel"><div class="avatar" id="myAvatar">?</div><div class="user-meta"><b id="myName">Usuário</b><small>Conectado</small></div><button id="logout" title="Sair">↪</button></div>
+    </aside>
+    <section class="chat">
+      <header class="chat-header"><span class="hash">#</span><strong id="channelName">bem-vindo</strong><span class="muted header-sub">Mensagens em tempo real</span></header>
+      <div id="messages" class="messages"><div class="welcome"><div class="welcome-hash">#</div><h2>Bem-vindo ao Browser Live Messenger!</h2><p>Crie ou selecione um servidor para começar.</p></div></div>
+      <form id="messageForm" class="composer"><span class="composer-plus">+</span><input id="messageInput" placeholder="Enviar mensagem..." maxlength="2000" autocomplete="off" disabled><button aria-label="Enviar" disabled id="sendButton">➤</button></form>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/app.js"></script>
+</body></html>
